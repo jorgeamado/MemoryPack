@@ -17,6 +17,10 @@ on:
         description: "Package version (e.g. 1.21.4). Leave empty for a 0.0.0-dev build."
         required: false
         default: ""
+      ref:
+        description: "Git ref to build (tag/branch/sha). Leave empty to build the dispatched ref. Use this to (re)publish historical upstream tags, e.g. 1.21.4."
+        required: false
+        default: ""
   push:
     tags:
       - "v*"
@@ -33,6 +37,8 @@ jobs:
       FEED: "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
 
       - uses: actions/setup-dotnet@v4
         with:
